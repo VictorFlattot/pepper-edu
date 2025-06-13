@@ -4,18 +4,18 @@ Une plateforme pédagogique interactive utilisant le robot humanoïde Pepper pou
 
 ## Contexte et motivation
 
-Le projet **pepper-edu** s’appuie sur les livrets « Éducation et Prévention des Maladies Chroniques » (EPMC) conçus par Dr Xavier Debussche et Maryvette Balcou-Debussche. Ces livrets offrent un cadre didactique éprouvé pour faire prendre conscience aux apprenants des facteurs modifiables influençant le risque cardiovasculaire, en combinant supports écrits, manipulations, échanges de groupe et expérimentations :contentReference[oaicite:0]{index=0}.
+Le projet **pepper-edu** s’appuie sur les livrets « Éducation et Prévention des Maladies Chroniques » (EPMC) conçus par Dr Xavier Debussche et Maryvette Balcou-Debussche. Ces livrets offrent un cadre didactique éprouvé pour faire prendre conscience aux apprenants des facteurs modifiables influençant le risque cardiovasculaire, en combinant supports écrits, manipulations, échanges de groupe et expérimentations.
 
 En introduisant Pepper comme médiateur pédagogique (« outil interactif »), le formateur peut :
 - guider individuellement la saisie des données biologiques (tension, cholestérol, glycémie…) via la tablette du robot ;  
 - renforcer l’attention et l’engagement par des messages vocaux et visuels ;  
-- centraliser en temps réel les résultats sur une interface web dédiée au formateur :contentReference[oaicite:1]{index=1}.
+- centraliser en temps réel les résultats sur une interface web dédiée au formateur.
 
 L’objectif est d’offrir une séance d’environ 2 heures où chaque participant :
 1. Évalue son **Total Santé** (score de 0 à 60) en fonction de six variables.  
 2. Comprend les mécanismes de la plaque d’athérome.  
 3. Découvre et choisit deux actions concrètes (une alimentaire, une activité ou comportementale).  
-4. Analyse la faisabilité de ces choix et s’engage à un plan d’action :contentReference[oaicite:2]{index=2}.
+4. Analyse la faisabilité de ces choix et s’engage à un plan d’action.
 
 ## Fonctionnalités principales
 
@@ -28,7 +28,7 @@ L’objectif est d’offrir une séance d’environ 2 heures où chaque particip
 - **Affichage pédagogique**  
   - Illustration de l’évolution de la plaque d’athérome (phase 1.6)  
   - Présentation des 10 cartes d’actions (phases 2.1–2.3)  
-  - Rapide infographie chronologique des étapes (Timeline) :contentReference[oaicite:3]{index=3}
+  - Rapide infographie chronologique des étapes (Timeline)
 
 - **Interface web formateur**  
   Visualisation en temps réel des scores individuels et collectifs, suivi des choix, export CSV/PDF.
