@@ -1,0 +1,52 @@
+[
+  {
+    "question": "Quelle est la capitale de la France ?",
+    "choices": ["Lyon", "Marseille", "Paris", "Nice"],
+    "answer": "C"
+  },
+  {
+    "question": "Quel est l'océan le plus vaste ?",
+    "choices": ["Atlantique", "Indien", "Arctique", "Pacifique"],
+    "answer": "D"
+  },
+  {
+    "question": "Combien y a-t-il de planètes dans le système solaire ?",
+    "choices": ["8", "7", "9", "6"],
+    "answer": "A"
+  },
+  {
+    "question": "Quel animal est le plus rapide sur terre ?",
+    "choices": ["Lion", "Guépard", "Antilope", "Léopard"],
+    "answer": "B"
+  },
+  {
+    "question": "Quelle est la langue la plus parlée au monde ?",
+    "choices": ["Anglais", "Espagnol", "Chinois", "Hindi"],
+    "answer": "C"
+  },
+  {
+    "question": "Quel est l'élément chimique 'O' ?",
+    "choices": ["Or", "Oxygène", "Osmium", "Oxalate"],
+    "answer": "B"
+  },
+  {
+    "question": "Combien de continents y a-t-il sur Terre ?",
+    "choices": ["5", "6", "7", "8"],
+    "answer": "C"
+  },
+  {
+    "question": "Qui a peint la Joconde ?",
+    "choices": ["Michel-Ange", "Léonard de Vinci", "Raphaël", "Van Gogh"],
+    "answer": "B"
+  },
+  {
+    "question": "Quel est le pays du Mont Fuji ?",
+    "choices": ["Corée", "Chine", "Japon", "Thaïlande"],
+    "answer": "C"
+  },
+  {
+    "question": "Combien de joueurs dans une équipe de football ?",
+    "choices": ["10", "11", "12", "9"],
+    "answer": "B"
+  }
+]

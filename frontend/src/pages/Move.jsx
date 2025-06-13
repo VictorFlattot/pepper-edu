@@ -1,0 +1,200 @@
+import React, { useEffect, useRef, useState } from 'react';
+import { Container, Button, Modal, Form, Spinner } from 'react-bootstrap';
+import '../styles/Move.css';
+
+export default function Move() {
+  const [controllerDetected, setControllerDetected] = useState(false);
+  const [availableBehaviors, setAvailableBehaviors] = useState([]);
+  const [loadingBehaviors, setLoadingBehaviors] = useState(false);
+  const [showModal, setShowModal] = useState(false);
+  const [selectedButton, setSelectedButton] = useState(null);
+  const [buttonMapping, setButtonMapping] = useState(() => {
+    const saved = localStorage.getItem("pepper_button_mapping");
+    return saved ? JSON.parse(saved) : {};
+  });
+
+  const buttonMappingRef = useRef(buttonMapping);
+  const lastButtonPressed = useRef({});
+  const lastSent = useRef({ x: 0, theta: 0 });
+  const lastTime = useRef(0);
+
+  const getBaseUrl = () => {
+    return `http://${localStorage.getItem('flask_ip') || 'localhost:5000'}`;
+  };
+
+  useEffect(() => {
+    buttonMappingRef.current = buttonMapping;
+  }, [buttonMapping]);
+
+  const loadBehaviors = async () => {
+    setLoadingBehaviors(true);
+    try {
+      await fetch(`${getBaseUrl()}/behavior/generate`, { method: 'POST' });
+      const res = await fetch(`${getBaseUrl()}/behavior/list`);
+      const data = await res.json();
+      if (Array.isArray(data)) {
+        setAvailableBehaviors(data);
+      }
+    } catch (err) {
+      console.error('Erreur chargement comportements:', err);
+    } finally {
+      setLoadingBehaviors(false);
+    }
+  };
+
+  useEffect(() => {
+    loadBehaviors();
+  }, []);
+
+  const curve = (v) => Math.sign(v) * Math.pow(Math.abs(v), 1.3);
+  const clamp = (v, min, max) => Math.max(min, Math.min(max, v));
+
+  const sendMove = (x, theta) => {
+    const now = Date.now();
+    if (now - lastTime.current < 100) return;
+
+    const clean = (v) => (Math.abs(v) < 0.05 ? 0 : parseFloat(v.toFixed(2)));
+    const payload = {
+      x: clean(clamp(x, -1.0, 1.0)),
+      y: 0,
+      theta: clean(clamp(theta, -1.0, 1.0))
+    };
+
+    if (
+      payload.x === lastSent.current.x &&
+      payload.theta === lastSent.current.theta
+    ) return;
+
+    lastSent.current = payload;
+    lastTime.current = now;
+
+    const endpoint =
+      payload.x !== 0 || payload.theta !== 0
+        ? `${getBaseUrl()}/pepper/move`
+        : `${getBaseUrl()}/pepper/stop`;
+
+    fetch(endpoint, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: payload.x !== 0 || payload.theta !== 0
+        ? JSON.stringify(payload)
+        : undefined,
+    });
+  };
+
+  useEffect(() => {
+    const pollGamepad = () => {
+      const gamepads = navigator.getGamepads();
+      const pad = gamepads[0];
+
+      if (pad) {
+        if (!controllerDetected) setControllerDetected(true);
+
+        const rawY = -pad.axes[1];
+        const rawX = pad.axes[0];
+        const deadzone = 0.1;
+        const maxSpeed = 0.6;
+        const maxTurn = 0.9;
+
+        const forward = Math.abs(rawY) > deadzone ? curve(rawY) * maxSpeed : 0;
+        const rotate = Math.abs(rawX) > deadzone ? -curve(rawX) * maxTurn : 0;
+
+        sendMove(forward, rotate);
+
+        pad.buttons.forEach((btn, index) => {
+          const behavior = buttonMappingRef.current[index];
+          if (btn.pressed && behavior) {
+            if (!lastButtonPressed.current[index]) {
+              lastButtonPressed.current[index] = true;
+              fetch(`${getBaseUrl()}/behavior/run?id=${behavior}`, {
+                method: 'POST',
+              });
+            }
+          } else {
+            lastButtonPressed.current[index] = false;
+          }
+        });
+      }
+
+      requestAnimationFrame(pollGamepad);
+    };
+
+    requestAnimationFrame(pollGamepad);
+  }, []);
+
+  const handleOpenMapping = (index) => {
+    setSelectedButton(index);
+    setShowModal(true);
+  };
+
+  const saveMapping = (id) => {
+    const updated = { ...buttonMapping, [selectedButton]: id };
+    setButtonMapping(updated);
+    localStorage.setItem("pepper_button_mapping", JSON.stringify(updated));
+    setShowModal(false);
+
+    Object.keys(lastButtonPressed.current).forEach(k => {
+      lastButtonPressed.current[k] = false;
+    });
+
+    if (id) {
+      fetch(`${getBaseUrl()}/pepper/run-behavior?id=${id}`, {
+        method: 'POST',
+      });
+    }
+  };
+
+  const buttonNames = {
+    0: 'X',
+    1: 'O',
+    2: 'Carré',
+    3: 'Triangle'
+  };
+
+  return (
+    <Container className="mt-4 text-center">
+      <h3>Déplacement de Pepper 🎮</h3>
+      <p className="text-muted">Stick gauche : avance/recul + rotation</p>
+
+      <div className="my-3">
+        <Button variant="outline-primary" onClick={loadBehaviors} disabled={loadingBehaviors}>
+          {loadingBehaviors ? <Spinner size="sm" animation="border" /> : "🔄 Recharger les comportements"}
+        </Button>
+      </div>
+
+      <div className="d-flex justify-content-center gap-4 flex-wrap">
+        {[0, 1, 2, 3].map((index) => (
+          <div
+            key={index}
+            className="mapping-btn btn btn-outline-dark"
+            onClick={() => handleOpenMapping(index)}
+          >
+            {buttonNames[index]}
+            <div className="label">
+              {availableBehaviors.find(b => b.id === buttonMapping[index])?.name || 'Aucun'}
+            </div>
+          </div>
+        ))}
+      </div>
+
+      <Modal show={showModal} onHide={() => setShowModal(false)} centered>
+        <Modal.Header closeButton>
+          <Modal.Title>Associer un comportement à {buttonNames[selectedButton]}</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <Form.Select
+            value={buttonMapping[selectedButton] || ""}
+            onChange={(e) => saveMapping(e.target.value)}
+          >
+            <option value="">-- Aucun --</option>
+            {availableBehaviors.map((b, i) => (
+              <option key={i} value={b.id}>
+                {b.name}
+              </option>
+            ))}
+          </Form.Select>
+        </Modal.Body>
+      </Modal>
+    </Container>
+  );
+}

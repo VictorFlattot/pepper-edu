@@ -1,0 +1,11 @@
+topic: ~quiz()
+
+language: frf
+
+proposal: u:(lancer le quiz) "Très bien, lançons une nouvelle question."
+
+u:(private) ~ask_question
+	$question
+	proposal: $choices
+	u1:(~answer)
+		^first[Bravo, c'est la bonne reponse !|Dommage, ce n'est pas la bonne reponse.]

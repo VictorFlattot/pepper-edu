@@ -1,0 +1,26 @@
+.dropdown-submenu {
+  position: relative;
+}
+
+.dropdown-submenu-toggle {
+  cursor: default;
+}
+
+.dropdown-submenu-content {
+  display: none;
+  position: absolute;
+  top: 0;
+  left: 100%;
+  margin-left: 0rem;
+  background-color: white;
+  border: 1px solid #dee2e6;
+  border-radius: 0.25rem;
+  padding: 0.25rem 0;
+  min-width: 50px;
+  z-index: 1050;
+  box-shadow: 0 0 4px rgba(0,0,0,0.1);
+}
+
+.dropdown-submenu:hover .dropdown-submenu-content {
+  display: block;
+}

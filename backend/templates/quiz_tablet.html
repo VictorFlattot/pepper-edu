@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <style>
+    body {
+      font-family: sans-serif;
+      margin: 0;
+      padding: 1rem;
+      background: #f5f5f5;
+      color: #333;
+      text-align: center;
+      position: relative;
+      overflow-x: hidden;
+      border: 10px solid transparent;
+      min-height: 100vh;
+      box-sizing: border-box; /* ✅ Correction clé ici */
+      transition: border-color 0.5s ease;
+    }
+
+
+
+    /* Bloc équipe active */
+    .team-indicator {
+      position: absolute;
+      top: 1rem;
+      left: 50%;
+      transform: translateX(-50%);
+      background-color: #007bff;
+      color: white;
+      padding: 1rem 2rem;
+      border-radius: 20px;
+      font-size: 2em;
+      font-weight: bold;
+      box-shadow: 0 0 10px rgba(0,0,0,0.3);
+      transition: background-color 0.3s ease;
+    }
+
+    /* Score à gauche */
+    .scoreboard {
+      position: absolute;
+      top: 50%;
+      left: 1rem;
+      transform: translateY(-50%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1.5rem;
+    }
+
+    .scoreboard-circle {
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      color: white;
+      font-weight: bold;
+      font-size: 2em;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 0 10px rgba(0,0,0,0.3);
+    }
+
+    .score-blue {
+      background-color: #007bff;
+    }
+
+    .score-red {
+      background-color: #dc3545;
+    }
+
+    /* Question */
+    h2#question {
+      margin: 1.5rem auto 1rem; /* 🧹 Moins d'espace en haut */
+      font-size: 3em;
+      max-width: 90%;
+      word-wrap: break-word;
+    }
+
+    /* Réponses */
+    .choices {
+      display: flex;
+      flex-direction: column; /* ✅ Une réponse sous l'autre */
+      align-items: center;
+      gap: 1.2rem;
+      margin-bottom: 2rem;
+    }
+
+    .choice {
+      background: #ffffff;
+      border-radius: 14px;
+      padding: 1.5rem;
+      width: 45%;
+      min-width: 150px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+      font-size: 2em;
+      transition: 0.3s;
+      text-align: left;
+      cursor: pointer;
+    }
+
+    .choice:hover {
+      background-color: #e0f0ff;
+    }
+
+    /* Compte à rebours */
+    .countdown-wrapper {
+      position: fixed;
+      bottom: 2rem;
+      right: 2rem;
+    }
+
+    .countdown {
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+      background: #e74c3c;
+      color: white;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 2.4em;
+      font-weight: 900;
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- Bloc scores -->
+  <div class="scoreboard">
+    <div class="scoreboard-circle score-blue" id="score-bleue">{{ scores.Bleue }}</div>
+    <div class="scoreboard-circle score-red" id="score-rouge">{{ scores.Rouge }}</div>
+  </div>
+
+  <!-- Question -->
+  <h2 id="question">{{ question }}</h2>
+
+  <!-- Choix de réponses -->
+  <div class="choices" id="choices">
+    {% for letter, text in choices %}
+      <div class="choice" onclick="submitAnswer('{{ letter }}', this)">
+        <b>{{ letter }}</b> : {{ text }}
+      </div>
+    {% endfor %}
+  </div>
+
+  <!-- Compte à rebours -->
+  <div class="countdown-wrapper">
+    <div class="countdown" id="countdown">30</div>
+  </div>
+
+  <!-- Script principal -->
+  <script>
+    var SERVER_IP = "{{ server_ip }}";
+    var isWaitingNextQuestion = false; // 🧠 Nouvelle variable
+  
+    function submitAnswer(letter, el) {
+      var xhr = new XMLHttpRequest();
+      xhr.open("POST", "http://" + SERVER_IP + ":5000/quiz/answer", true);
+      xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+  
+      xhr.onreadystatechange = function () {
+        if (xhr.readyState === 4 && xhr.status === 200) {
+          var res = JSON.parse(xhr.responseText);
+          if (res.success) {
+            // ✅ Feedback bouton seulement
+            el.style.backgroundColor = res.correct ? "#28a745" : "#dc3545";
+            el.style.color = "#fff";
+  
+            // 🔥 Pendant qu'on attend la prochaine question, bloquer refreshState
+            isWaitingNextQuestion = true;
+  
+            setTimeout(function () {
+              var nextXhr = new XMLHttpRequest();
+              nextXhr.open("POST", "http://" + SERVER_IP + ":5000/quiz/next", true);
+              nextXhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+              nextXhr.onreadystatechange = function () {
+                if (nextXhr.readyState === 4 && nextXhr.status === 200) {
+                  window.location.reload();
+                }
+              };
+              nextXhr.send();
+            }, 1500);
+          }
+        }
+      };
+  
+      xhr.send(JSON.stringify({ answer: letter }));
+    }
+  
+    function refreshState() {
+      if (isWaitingNextQuestion) {
+        // ❌ On saute refreshState pendant qu'on attend la prochaine question
+        return;
+      }
+  
+      var xhr = new XMLHttpRequest();
+      xhr.open("GET", "http://" + SERVER_IP + ":5000/quiz/state", true);
+      xhr.onload = function () {
+        if (xhr.status === 200) {
+          var data = JSON.parse(xhr.responseText);
+          if (data && data.scores) {
+            document.getElementById("score-bleue").innerText = data.scores.Bleue;
+            document.getElementById("score-rouge").innerText = data.scores.Rouge;
+            document.getElementById("question").innerText = data.question;
+  
+            if (data.current_team === "Bleue") {
+              document.body.style.borderColor = "#007bff";
+            } else if (data.current_team === "Rouge") {
+              document.body.style.borderColor = "#dc3545";
+            } else {
+              document.body.style.borderColor = "transparent";
+            }
+          }
+        }
+      };
+      xhr.send();
+    }
+  
+    // 🔁 Rafraîchir toutes les 2 secondes
+    setInterval(refreshState, 2000);
+  
+    // 🕓 Compte à rebours
+    setTimeout(function () {
+      var i = 30;
+      var interval = setInterval(function () {
+        i--;
+        document.getElementById("countdown").innerText = i;
+        if (i <= 0) clearInterval(interval);
+      }, 1000);
+    }, 10000);
+  </script>
+  
+
+</body>
+</html>

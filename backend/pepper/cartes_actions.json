@@ -1,0 +1,107 @@
+[
+  {
+    "numero": 1,
+    "type": "alim",
+    "label": "Manger moins salé",
+    "bonus": { "tension": 3 }
+  },
+  {
+    "numero": 2,
+    "type": "alim",
+    "label": "Légumes + 1 fruit à chaque repas",
+    "bonus": {
+      "tension": 2,
+      "ldl": 1,
+      "hba1c": 1,
+      "tt": 1
+    }
+  },
+  {
+    "numero": 3,
+    "type": "alim",
+    "label": "Réduire les sucreries et le grignotage",
+    "bonus": {
+      "ldl": 1,
+      "hba1c": 2,
+      "tt": 2
+    }
+  },
+  {
+    "numero": 4,
+    "type": "alim",
+    "label": "Repas équilibrés",
+    "bonus": {
+      "tension": 1,
+      "ldl": 1,
+      "hdl": 1,
+      "hba1c": 1,
+      "tt": 1
+    }
+  },
+  {
+    "numero": 5,
+    "type": "alim",
+    "label": "Limiter les graisses",
+    "bonus": {
+      "ldl": 2,
+      "hdl": 1,
+      "hba1c": 2,
+      "tt": 2
+    }
+  },
+  {
+    "numero": 8,
+    "type": "autre",
+    "label": "Marcher 3x/semaine",
+    "bonus": {
+      "tension": 1,
+      "ldl": 1,
+      "hdl": 1,
+      "hba1c": 1,
+      "tt": 1
+    }
+  },
+  {
+    "numero": 7,
+    "type": "autre",
+    "label": "Marcher chaque jour",
+    "bonus": {
+      "tension": 2,
+      "ldl": 1,
+      "hdl": 2,
+      "hba1c": 2,
+      "tt": 1,
+      "tabac": 2
+    }
+  },
+  {
+    "numero": 6,
+    "type": "autre",
+    "label": "Limiter l’alcool",
+    "bonus": {
+      "tension": 1,
+      "hdl": 1,
+      "hba1c": 1,
+      "gly": 1
+    }
+  },
+  {
+    "numero": 9,
+    "type": "autre",
+    "label": "Prendre ses médicaments",
+    "bonus": {
+      "tension": 2,
+      "ldl": 2,
+      "hdl": 1,
+      "hba1c": 2
+    }
+  },
+  {
+    "numero": 10,
+    "type": "autre",
+    "label": "Arrêter de fumer",
+    "bonus": {
+      "tabac": 10
+    }
+  }
+]

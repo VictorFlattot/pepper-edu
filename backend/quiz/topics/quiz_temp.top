@@ -1,0 +1,46 @@
+topic: ~diabete_dialog()
+
+language: frf
+
+concept:(demande_diabete) ["Pepper explique nous le diabète" "parle nous du diabète" "qu'est-ce que le diabète"]
+concept:(affirmatif) ["oui" "ouais" "bien sûr" "exactement" "tout à fait" "c'est ça"]
+concept:(negatif) ["non" "pas du tout" "je ne pense pas" "pas vraiment"]
+
+u:(~demande_diabete)
+    Bien sûr ! Le diabète est une maladie chronique caractérisée par un excès de sucre dans le sang. Connais-tu la différence entre le diabète de type 1 et de type 2 ?
+    proposal: Oui
+    proposal: Non
+
+    u1:(~affirmatif)
+        Super ! Peux-tu me dire une différence principale entre le type 1 et le type 2 ?
+        proposal: "Le type 1 est auto-immun, pas le type 2"
+        proposal: "Le type 2 nécessite toujours de l'insuline"
+        proposal: "Je ne sais pas"
+
+        u2:("Le type 1 est auto-immun, pas le type 2")
+            Exactement ! Le diabète de type 1 est auto-immun, ce qui signifie que le corps attaque les cellules productrices d'insuline du pancréas.
+
+        u2:("Le type 2 nécessite toujours de l'insuline")
+            Pas tout à fait ! Le diabète de type 2 peut parfois être géré par des médicaments ou simplement des changements de style de vie, bien que certains patients nécessitent effectivement de l'insuline.
+
+        u2:("Je ne sais pas")
+            Pas de soucis ! Le diabète de type 1 est une maladie auto-immune où le corps détruit les cellules qui produisent l'insuline. Le diabète de type 2 est souvent lié au mode de vie et à la résistance à l'insuline.
+
+    u1:(~negatif)
+        Je t'explique rapidement alors ! Le diabète de type 1 est une maladie auto-immune où le corps attaque les cellules productrices d'insuline. Le diabète de type 2 survient généralement lorsque le corps devient résistant à l'insuline à cause de facteurs comme l'obésité ou l'inactivité. Souhaites-tu en savoir plus ?
+        proposal: Oui
+        proposal: Non
+
+        u2:(~affirmatif)
+            Génial ! Savais-tu que l'activité physique et une alimentation équilibrée sont essentielles pour gérer le diabète ? As-tu d'autres questions ?
+            proposal: Oui
+            proposal: Non
+
+            u3:(~affirmatif)
+                Je t'écoute, pose-moi ta question !
+
+            u3:(~negatif)
+                Avec plaisir ! Si tu as d'autres questions, n'hésite pas.
+
+        u2:(~negatif)
+            D'accord, n'hésite pas à revenir me voir si tu veux en discuter !

@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <style>
+    body {
+      margin: 0;
+      font-family: sans-serif;
+      color: white;
+      text-align: center;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      overflow: hidden;
+
+      {% if team == "Egalite" %}
+      background: linear-gradient(135deg, #007bff 50%, #dc3545 50%);
+      {% elif team == "Bleue" %}
+      background-color: #007bff;
+      {% else %}
+      background-color: #dc3545;
+      {% endif %}
+    }
+
+    h1 {
+      font-size: 4em;
+      margin-bottom: 0.2em;
+      z-index: 1;
+    }
+
+    h2 {
+      font-size: 2em;
+      margin-bottom: 1.5em;
+      z-index: 1;
+    }
+
+  </style>
+</head>
+<body>
+
+  <h1>
+    {% if team == "Egalite" %}
+      🤝 Égalité parfaite !
+    {% else %}
+      🎉 Victoire {{ team }} !
+    {% endif %}
+  </h1>
+
+  <h2>👏 Félicitations !</h2>
+
+</body>
+</html>
