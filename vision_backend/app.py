@@ -13,7 +13,7 @@ hands = mpHands.Hands(static_image_mode=True, max_num_hands=1, model_complexity=
                       min_detection_confidence=0.5)
 tipIds = [4, 8, 12, 16, 20]
 
-@app.route('/ping-vision')
+@app.route('/ping')
 def ping():
     return jsonify({"success": True, "message": "Vision OK"})
 

@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from flask import Flask, request
+from flask import Flask, request, jsonify
 import logging
 from flask_cors import CORS
 from pepper.connection import pepper_routes
@@ -37,6 +37,9 @@ app.register_blueprint(camera_routes)
 app.register_blueprint(memory_routes)
 app.register_blueprint(card_routes, url_prefix='/card')
 
+@app.route('/ping')
+def ping():
+    return jsonify({"success": True, "message": "Backend OK"})
 
 # Logger de Flask/Werkzeug
 log = logging.getLogger('werkzeug')

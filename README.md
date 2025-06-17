@@ -2,6 +2,10 @@
 
 Une plateforme pédagogique interactive utilisant le robot humanoïde Pepper pour accompagner des sessions d’éducation thérapeutique sur le risque cardiovasculaire.
 
+1. [**Contexte et motivation**](#contexte-et-motivation) 
+2. [**Installation**](#installation)  
+3. [**Usage**](#usage)
+
 ## Contexte et motivation
 
 Le projet **pepper-edu** s’appuie sur les livrets « Éducation et Prévention des Maladies Chroniques » (EPMC) conçus par Dr Xavier Debussche et Maryvette Balcou-Debussche. Ces livrets offrent un cadre didactique éprouvé pour faire prendre conscience aux apprenants des facteurs modifiables influençant le risque cardiovasculaire, en combinant supports écrits, manipulations, échanges de groupe et expérimentations.
@@ -38,10 +42,6 @@ L’objectif est d’offrir une séance d’environ 2 heures où chaque particip
   - **Blueprints** : route universelle pour l’affichage tablette, gestion des données et export
 
 ## Installation
-
-### Prérequis
-
-- Node.js + npm (frontend React)
 
 ### Préparation de l’environnement Python 2.7 isolé
 
@@ -186,10 +186,71 @@ python app.py
 ```
 Puis, dans un autre terminal :
 ```bash
-curl http://localhost:5050/ping-vision
+curl http://localhost:5050/ping
 ```
 Vous devriez obtenir :
 ```json
 {"success":true,"message":"Vision OK"}
 
 ```
+
+## Usage
+
+### 1. Activer les environnements virtuels
+
+Ouvrez deux terminaux :
+
+```bash
+# Terminal 1 : pour le backend Pepper
+source ~/pepper_dev/pepper_env/bin/activate
+```
+```bash
+# Terminal 2 : pour le service Vision
+source ~/pepper_dev/vision_env/bin/activate
+```
+
+### 2. Lancer le backend Flask (API Pepper)
+Dans **Terminal 1** :
+```bash
+cd ~/pepper-edu/backend
+python app.py
+```
+L’API Pepper est désormais disponible sur http://localhost:5000.
+
+### 3. Lancer le service Vision (MediaPipe)
+Dans **Terminal 2** :
+```bash
+cd ~/pepper-edu/vision_backend
+python app.py
+```
+Le service Vision écoute sur http://localhost:5050.
+
+### 4. Lancer le frontend React
+Ouvrez un **Terminal 3** (ou un onglet) sans activer d’env virtuel :
+```bash
+cd ~/pepper-edu/frontend
+npm install    # si ce n'est pas déjà fait
+npm run dev    # ou `npm start` suivant votre config
+```
+L’interface dashboard est accessible sur http://localhost:5173.
+
+### Lancement rapide avec `start_all.sh`
+
+Plutôt que de démarrer manuellement chaque composant, vous pouvez utiliser le script fourni :
+
+```bash
+# Depuis la racine du dépôt
+chmod +x start_all.sh
+./start_all.sh
+```
+Ce script lance automatiquement :
+- Backend Pepper (Flask) sur le port 5000
+- Service Vision (Flask + MediaPipe) sur le port 5050
+- Frontend React sur le port 3000
+
+### Vérifier les connexions
+```bash
+curl http://localhost:5000/ping    # doit renvoyer {"success":true,"message":"Backend OK"}
+curl http://localhost:5050/ping    # doit renvoyer {"success":true,"message":"Vision OK"}
+```
+Ouvrez ensuite votre navigateur sur http://localhost:5173 pour accéder au dashboard
