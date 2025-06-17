@@ -151,3 +151,45 @@ except Exception as e:
 EOF
 
 ```
+
+### Environnement Vision (Python 3)
+
+Le service de vision utilise Flask, OpenCV et MediaPipe sous Python 3. Pour le configurer, procédez comme suit :
+
+#### 1. Installer Python 3 et venv  
+```bash
+sudo apt update
+sudo apt install python3 python3-venv python3-pip
+```
+
+#### 2. Créer et activer l’environnement virtuel
+```bash
+cd ~/pepper_dev
+python3 -m venv vision_env
+source vision_env/bin/activate
+```
+
+#### 3. Installer les dépendances
+```bash
+pip install -r vision_backend/requirements.txt
+```
+
+#### 4. Installer les bibliothèques système pour OpenCV
+```bash
+sudo apt install libjpeg-dev libpng-dev libavcodec-dev libavformat-dev libswscale-dev
+```
+
+#### 5. Tester le service
+```bash
+cd vision_backend
+python app.py
+```
+Puis, dans un autre terminal :
+```bash
+curl http://localhost:5050/ping-vision
+```
+Vous devriez obtenir :
+```json
+{"success":true,"message":"Vision OK"}
+
+```

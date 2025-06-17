@@ -1,0 +1,5 @@
+Flask>=2.0
+flask-cors>=3.0
+opencv-python>=4.5
+mediapipe>=0.8
+numpy>=1.19
