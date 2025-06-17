@@ -1,59 +1,45 @@
 import React, { useState } from 'react';
-import { Button, Spinner } from 'react-bootstrap';
+import { Container, Card, Button, Spinner } from 'react-bootstrap';
 
 export default function Overview() {
-  const [mapImage, setMapImage] = useState(null);
-  const [loadingMap, setLoadingMap] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const getBaseUrl = () => {
     return `http://${localStorage.getItem('flask_ip') || 'localhost:5000'}`;
   };
 
-  const fetchMap = async () => {
-    setLoadingMap(true);
-    setMapImage(null);
+  const startSession = async () => {
+    setLoading(true);
     try {
-      const res = await fetch(`${getBaseUrl()}/nav/map`);
+      const res = await fetch(`${getBaseUrl()}/behavior/run?id=menu-f6a1ea/seance-diabete`, {
+        method: 'POST'
+      });
       const data = await res.json();
-      if (data.success) {
-        setMapImage(`data:image/png;base64,${data.image}`);
-      } else {
-        console.error("Erreur récupération carte :", data.error);
-      }
+      console.log('✅ Behavior lancé :', data);
     } catch (err) {
-      console.error("Erreur réseau récupération carte :", err);
-    } finally {
-      setLoadingMap(false);
+      console.error('❌ Erreur :', err);
     }
+    setLoading(false);
   };
 
   return (
-    <div className="container text-center">
-      <h3 className="mb-4">Tableau de bord</h3>
+    <Container className="mt-5 text-center">
+      <h1 className="mb-4">Vue d’ensemble</h1>
 
-      <div className="mb-3">
-        <Button variant="primary" onClick={fetchMap} disabled={loadingMap}>
-          {loadingMap ? <Spinner size="sm" animation="border" /> : '🗺️ Afficher la carte SLAM'}
-        </Button>
-      </div>
+      <Card className="mb-4 text-start">
+        <Card.Body>
+          <Card.Title>But de la séance</Card.Title>
+          <Card.Text>
+            Cette interface vous accompagne dans l’animation d’une séance éducative sur le risque cardiovasculaire.
+            Pepper interagit avec les participants pour recueillir leurs données, présenter les actions possibles,
+            et favoriser l’engagement dans une démarche de santé.
+          </Card.Text>
+        </Card.Body>
+      </Card>
 
-      {mapImage && (
-        <div className="mt-4">
-          <h5>Carte générée par Pepper</h5>
-          <img
-            src={mapImage}
-            alt="Carte SLAM"
-            style={{
-              width: '300px',
-              maxWidth: '50%',
-              border: '2px solid #ccc',
-              borderRadius: '8px',
-              marginTop: '1rem',
-              boxShadow: '0 0 10px rgba(0,0,0,0.15)'
-            }}
-          />
-        </div>
-      )}
-    </div>
+      <Button onClick={startSession} disabled={loading}>
+        {loading ? <Spinner animation="border" size="sm" /> : 'Lancer la seance'}
+      </Button>
+    </Container>
   );
 }

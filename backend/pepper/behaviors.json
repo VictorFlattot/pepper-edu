@@ -1,32 +1,14 @@
 [
   {
-    "id": "untitled-68fb3c/behavior_1",
-    "name": "Accueil",
-    "icon": "👋",
-    "description": "Pepper accueille les visiteurs avec un message chaleureux."
-  },
-  {
     "id": "date_dance-cd5ebc/.",
     "name": "Danse",
     "icon": "💃",
     "description": "Pepper exécute une petite chorégraphie amusante."
   },
   {
-    "id": "menu-f6a1ea/presentation-atherome",
-    "name": "Informations",
+    "id": "menu-f6a1ea/menu",
+    "name": "Menu",
     "icon": "ℹ️",
-    "description": "Pepper partage des informations générales sur un sujet défini."
-  },
-  {
-    "id": "behavior_joke",
-    "name": "Blague",
-    "icon": "😂",
-    "description": "Pepper raconte une blague pour détendre l’atmosphère."
-  },
-  {
-    "id": "behavior_directions",
-    "name": "Orientation",
-    "icon": "🧭",
-    "description": "Pepper donne des indications pour se repérer dans les lieux."
+    "description": "Ouvre le menu edu diabete"
   }
 ]
