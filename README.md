@@ -5,6 +5,7 @@ Une plateforme pédagogique interactive utilisant le robot humanoïde Pepper pou
 1. [**Contexte et motivation**](#contexte-et-motivation) 
 2. [**Installation**](#installation)  
 3. [**Usage**](#usage)
+3. [**Contact**](#contact)
 
 ## Contexte et motivation
 
@@ -254,3 +255,13 @@ curl http://localhost:5000/ping    # doit renvoyer {"success":true,"message":"Ba
 curl http://localhost:5050/ping    # doit renvoyer {"success":true,"message":"Vision OK"}
 ```
 Ouvrez ensuite votre navigateur sur http://localhost:5173 pour accéder au dashboard
+
+## Contact
+
+Pour toute question, suggestion ou rapport de bug, n’hésitez pas à me contacter :
+
+- **GitHub Issues** : Ouvrez une issue sur le dépôt  
+  https://github.com/VictorFlattot/pepper-edu/issues  
+- **Email** : victor.flattot@gmail.com  
+
+Merci !  
